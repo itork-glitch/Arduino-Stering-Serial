@@ -191,6 +191,24 @@ void toCenter()
   }
 }
 
+// Tryb białego światła
+void white()
+{
+  for (uint16_t i = 100; i < 255; i++)
+  {
+    strip.fill(strip.Color(i, i, i - 50));
+    strip.show();
+    delay(50);
+  }
+
+  for (uint16_t i = 255; i >= 100; i--)
+  {
+    strip.fill(strip.Color(i, i, i - 50));
+    strip.show();
+    delay(50);
+  }
+}
+
 // Tryb resetujcy - wyłącz wszystkie diody
 void allOff()
 {
@@ -215,14 +233,18 @@ void loop()
   }
   else if (receivedChar == '3')
   {
-    toCenter();
+    toCenter(); // Przykład zmiany trybu na "3"
   }
   else if (receivedChar == '4')
   {
-    commet(); // Przykład zmiany trybu na "3"
+    commet(); // Przykład zmiany trybu na "4"
+  }
+  else if (receivedChar == '5')
+  {
+    white(); // Przykład zmiany trybu na "5"
   }
   else if (receivedChar == '9')
   {
-    allOff(); // Przykład zmiany trybu na "3"
+    allOff(); // Przykład zmiany trybu na "9"
   }
 }
