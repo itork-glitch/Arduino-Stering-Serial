@@ -3,64 +3,45 @@
 #include "config.h"
 
 char receivedChar = '0'; // Domyślny tryb
+int rainbowSpin = 0;
 
 void setup()
 {
   strip.begin();
   strip.show();
-  strip.setBrightness(255);
   Serial.begin(9600);
 }
 
 // Funkcja animacja komenty
 void commet()
 {
-  unsigned long startTime = millis();
-  unsigned long elapsedTime = 0;
-  unsigned long commetTime = 30000;
-
-  while (elapsedTime < commetTime)
+  for (int i = NUMLEDS - 1; i >= 0; i--)
   {
-    for (int i = NUMLEDS - 1; i >= 0; i--)
+    for (int j = 0; j < NUMLEDS; j++)
     {
-      for (int j = 0; j < NUMLEDS; j++)
+      int brightness = map((j + i) % NUMLEDS, 0, NUMLEDS / 2, 0, 255);
+      brightness = constrain(brightness, 0, 255);
+      if ((j + i) % NUMLEDS >= NUMLEDS / 2)
       {
-        int brightness = map((j + i) % NUMLEDS, 0, NUMLEDS / 2, 0, 255);
-        brightness = constrain(brightness, 0, 255);
-        if ((j + i) % NUMLEDS >= NUMLEDS / 2)
-        {
-          strip.setPixelColor(j, strip.Color(0, 0, 0));
-        }
-        else
-        {
-          strip.setPixelColor(j, strip.Color(0, brightness, brightness));
-        }
+        strip.setPixelColor(j, strip.Color(0, 0, 0));
       }
-      strip.show();
-      delay(30);
-
-      elapsedTime = millis() - startTime;
+      else
+      {
+        strip.setPixelColor(j, strip.Color(0, brightness, brightness));
+      }
     }
+    strip.show();
+    delay(30);
   }
 }
 
 // Funkcja tęczy
 void rainbow()
 {
-  unsigned long startTime = millis();
-  unsigned long elapsedTime = 0;
-  unsigned long rainbowTime = 30000;
-  int rainbow = 0;
-
-  while (elapsedTime < rainbowTime)
-  {
-    strip.rainbow(rainbow);
-    strip.show();
-    delay(15);
-
-    elapsedTime = millis() - startTime;
-    rainbow -= 256;
-  }
+  strip.rainbow(rainbowSpin);
+  strip.show();
+  delay(15);
+  rainbowSpin -= 256;
 }
 
 // Przykład zmiany trybu na "2" - stały kolor fioletowy
@@ -242,6 +223,21 @@ void loop()
   else if (receivedChar == '5')
   {
     white(); // Przykład zmiany trybu na "5"
+  }
+  else if (receivedChar == '6')
+  {
+    strip.setBrightness(60);
+    strip.show();
+  }
+  else if (receivedChar == '7')
+  {
+    strip.setBrightness(150);
+    strip.show();
+  }
+  else if (receivedChar == '8')
+  {
+    strip.setBrightness(255);
+    strip.show();
   }
   else if (receivedChar == '9')
   {
